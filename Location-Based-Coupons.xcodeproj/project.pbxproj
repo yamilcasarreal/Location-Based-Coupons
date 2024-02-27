@@ -14,6 +14,7 @@
 		7A1932A82B8E78B1005BF32B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1932A72B8E78B1005BF32B /* LoginView.swift */; };
 		7A1932AA2B8E79A2005BF32B /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1932A92B8E79A2005BF32B /* InputView.swift */; };
 		7A1932AC2B8E7CCC005BF32B /* SignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1932AB2B8E7CCC005BF32B /* SignInButton.swift */; };
+		7A1932AE2B8E7FCA005BF32B /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1932AD2B8E7FCA005BF32B /* RegistrationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		7A1932A72B8E78B1005BF32B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		7A1932A92B8E79A2005BF32B /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 		7A1932AB2B8E7CCC005BF32B /* SignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInButton.swift; sourceTree = "<group>"; };
+		7A1932AD2B8E7FCA005BF32B /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				7A1932A72B8E78B1005BF32B /* LoginView.swift */,
+				7A1932AD2B8E7FCA005BF32B /* RegistrationView.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 				7A1932AC2B8E7CCC005BF32B /* SignInButton.swift in Sources */,
 				7A1932A82B8E78B1005BF32B /* LoginView.swift in Sources */,
 				7A1932AA2B8E79A2005BF32B /* InputView.swift in Sources */,
+				7A1932AE2B8E7FCA005BF32B /* RegistrationView.swift in Sources */,
 				7A073A112B8D11150004EC0B /* ContentView.swift in Sources */,
 				7A073A0F2B8D11150004EC0B /* Location_Based_CouponsApp.swift in Sources */,
 			);
