@@ -13,7 +13,7 @@ struct InputView: View {
     let placeholder: String
     var isSecureField = false
     var body: some View {
-        VStack {
+        VStack (alignment: .leading, spacing: 12){
             Text(title)
                 .foregroundStyle(Color(.darkGray))
                 .fontWeight(.semibold)
@@ -25,6 +25,7 @@ struct InputView: View {
                 SecureField(placeholder, text: $text)
                     .font(.system(size: 14))
             }
+            Divider()
         }
     }
 }
