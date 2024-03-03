@@ -12,6 +12,7 @@ struct InputView: View {
     let title: String
     let placeholder: String
     var isSecureField = false
+    
     var body: some View {
         VStack (alignment: .leading, spacing: 12){
             Text(title)
@@ -22,7 +23,7 @@ struct InputView: View {
                 SecureField(placeholder, text: $text)
                     .font(.system(size: 14))
             } else {
-                SecureField(placeholder, text: $text)
+                TextField(placeholder, text: $text)
                     .font(.system(size: 14))
             }
             Divider()

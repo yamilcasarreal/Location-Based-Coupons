@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
-
+import Firebase
 @main
 struct Location_Based_CouponsApp: App {
+    @StateObject var viewModel = AuthViewModel()
+    
+    
+    init(){
+        FirebaseApp.configure()
+    }
+    
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(viewModel)
         }
     }
 }
