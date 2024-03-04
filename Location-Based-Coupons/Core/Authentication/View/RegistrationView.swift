@@ -51,8 +51,7 @@ struct RegistrationView: View {
                                 .imageScale(.large)
                                 .fontWeight(.bold)
                                 .foregroundColor(Color(.systemGreen))
-                        }
-                        else {
+                        } else {
                             Image(systemName: "xmark.circle.fill")
                                 .imageScale(.large)
                                 .fontWeight(.bold)
@@ -81,7 +80,7 @@ struct RegistrationView: View {
             .background(Color(.systemGreen))
             .cornerRadius(30)
             .padding(.top, 24)
-            .disabled(formIsValid)
+            .disabled(!formIsValid)
             .opacity(formIsValid ? 1.0 : 0.5)
             
             Spacer()
