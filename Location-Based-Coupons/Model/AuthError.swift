@@ -34,9 +34,9 @@ enum AuthError: Error {
     var description: String {
         switch self {
         case .invalidEmail:
-            return "The email you entered is invalid. Please try again"
+            return "The email you entered is already in use. Please try again"
         case .invalidPassword:
-            return "Incorrect password. Please try again"
+            return "Invalid Email or Incorrect password. Please try again"
         case .userNotFound:
             return "It looks like there is no account associated with this email. Create an account to continue"
         case .weakPassword:

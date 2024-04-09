@@ -45,7 +45,7 @@ class AuthViewModel: ObservableObject {
         } catch {
             let authError = AuthErrorCode.Code(rawValue: (error as NSError).code)
             self.showAlert = true
-            self.authError = AuthError(authErrorCode: authError ?? .userNotFound)
+            self.authError = AuthError(authErrorCode: .wrongPassword)
             isLoading = false
         }
     }
@@ -64,7 +64,7 @@ class AuthViewModel: ObservableObject {
         } catch {
             let authError = AuthErrorCode.Code(rawValue: (error as NSError).code)
             self.showAlert = true
-            self.authError = AuthError(authErrorCode: authError ?? .userNotFound)
+            self.authError = AuthError(authErrorCode: .invalidEmail)
             isLoading = false
         }
     }
