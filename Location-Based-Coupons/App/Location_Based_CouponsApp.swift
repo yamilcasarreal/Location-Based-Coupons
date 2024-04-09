@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseCore
 import Firebase
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -19,13 +20,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct Location_Based_CouponsApp: App {
     @StateObject var viewModel = AuthViewModel()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
-    
-//    init(){
-//        FirebaseApp.configure()
-//    }
-    
-    
     var body: some Scene {
         WindowGroup {
             ContentView()

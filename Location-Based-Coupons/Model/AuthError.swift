@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 import Firebase
 
 enum AuthError: Error {
@@ -41,7 +42,7 @@ enum AuthError: Error {
         case .weakPassword:
             return "Your password must be at least 6 characters in length. Please try again."
         case .unknown:
-            return "Email/Password incorrect. Please try again."
+            return "Unknown error has occured. Please try again."
         }
     }
 }

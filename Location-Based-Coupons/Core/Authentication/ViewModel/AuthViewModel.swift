@@ -7,14 +7,16 @@
 
 import Foundation
 import Firebase
+import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestoreSwift
 import FirebaseFirestore
 
 
 protocol AuthenticationFormProtocol {
-    var formIsValid: Bool {get}
+    var formIsValid: Bool { get }
 }
+
 @MainActor
 class AuthViewModel: ObservableObject {
     @Published var userSession: FirebaseAuth.User?
@@ -35,7 +37,6 @@ class AuthViewModel: ObservableObject {
     
     func signIn(withEmail email: String, password: String) async throws {
         isLoading = true
-        
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
@@ -56,7 +57,6 @@ class AuthViewModel: ObservableObject {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             self.userSession = result.user
             let user = User(id: result.user.uid, fullName: fullname, email: email)
-
             guard let encodedUser = try? Firestore.Encoder().encode(user) else { return }
             try await Firestore.firestore().collection("users").document(result.user.uid).setData(encodedUser)
             await fetchUser()
