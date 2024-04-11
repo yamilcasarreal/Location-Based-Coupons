@@ -11,7 +11,7 @@ struct CustomProgressView: View {
     var body: some View {
         ProgressView()
             .progressViewStyle(.circular)
-            .accentColor(.white)
+            .accentColor(.green)
             .scaleEffect(x: 1.5, y: 1.5, anchor: .center)
             .frame(width: 80, height: 80)
             .background(Color(.systemGray4))

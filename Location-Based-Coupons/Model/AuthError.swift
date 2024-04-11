@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import FirebaseAuth
 import Firebase
 
 enum AuthError: Error {
     case invalidEmail
+    case emailAlreadyInUse
     case invalidPassword
     case userNotFound
     case weakPassword
@@ -17,8 +19,10 @@ enum AuthError: Error {
     
     init(authErrorCode: AuthErrorCode.Code) {
         switch authErrorCode {
-        case .invalidEmail:
+        case .invalidEmail
             self = .invalidEmail
+        case .emailAlreadyInUse:
+            self = .emailAlreadyInUse
         case .wrongPassword:
             self = .invalidPassword
         case .weakPassword:
@@ -34,6 +38,8 @@ enum AuthError: Error {
         switch self {
         case .invalidEmail:
             return "The email you entered is invalid. Please try again"
+        case .emailAlreadyInUse:
+            return "The email you entered is already in use. Please try again"
         case .invalidPassword:
             return "Incorrect password. Please try again"
         case .userNotFound:
@@ -41,7 +47,7 @@ enum AuthError: Error {
         case .weakPassword:
             return "Your password must be at least 6 characters in length. Please try again."
         case .unknown:
-            return "Email/Password incorrect. Please try again."
+            return "Unknown error has occured. Please try again."
         }
     }
 }
