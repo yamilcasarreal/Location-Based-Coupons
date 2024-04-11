@@ -19,7 +19,7 @@ enum AuthError: Error {
     
     init(authErrorCode: AuthErrorCode.Code) {
         switch authErrorCode {
-        case .invalidEmail
+        case .invalidEmail:
             self = .invalidEmail
         case .emailAlreadyInUse:
             self = .emailAlreadyInUse
