@@ -43,9 +43,26 @@ class AuthViewModel: ObservableObject {
             await fetchUser()
             isLoading = false
         } catch {
+//                if let authError = AuthErrorCode.Code(rawValue: (error as NSError).code) {
+//
+//                    switch authError {
+//                        case .wrongPassword:
+//                            self.authError = AuthError(authErrorCode: .wrongPassword)
+//                            
+//                            
+//                        case .invalidEmail:
+//                            self.authError = AuthError(authErrorCode: .invalidEmail)
+//                            
+//                            
+//                        default:
+//                            print("Error: \(error.localizedDescription)")
+//                    }
+//                    
+//                }
+                
             let authError = AuthErrorCode.Code(rawValue: (error as NSError).code)
             self.showAlert = true
-            self.authError = AuthError(authErrorCode: .wrongPassword)
+            self.authError = AuthError(authErrorCode: authError ?? .userNotFound)
             isLoading = false
         }
     }
@@ -62,9 +79,10 @@ class AuthViewModel: ObservableObject {
             await fetchUser()
             isLoading = false
         } catch {
+            
             let authError = AuthErrorCode.Code(rawValue: (error as NSError).code)
             self.showAlert = true
-            self.authError = AuthError(authErrorCode: .invalidEmail)
+            self.authError = AuthError(authErrorCode: authError ?? .invalidEmail)
             isLoading = false
         }
     }

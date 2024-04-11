@@ -11,6 +11,7 @@ import Firebase
 
 enum AuthError: Error {
     case invalidEmail
+    case emailAlreadyInUse
     case invalidPassword
     case userNotFound
     case weakPassword
@@ -18,8 +19,10 @@ enum AuthError: Error {
     
     init(authErrorCode: AuthErrorCode.Code) {
         switch authErrorCode {
-        case .invalidEmail:
+        case .invalidEmail
             self = .invalidEmail
+        case .emailAlreadyInUse:
+            self = .emailAlreadyInUse
         case .wrongPassword:
             self = .invalidPassword
         case .weakPassword:
@@ -34,9 +37,11 @@ enum AuthError: Error {
     var description: String {
         switch self {
         case .invalidEmail:
+            return "The email you entered is invalid. Please try again"
+        case .emailAlreadyInUse:
             return "The email you entered is already in use. Please try again"
         case .invalidPassword:
-            return "Invalid Email or Incorrect password. Please try again"
+            return "Incorrect password. Please try again"
         case .userNotFound:
             return "It looks like there is no account associated with this email. Create an account to continue"
         case .weakPassword:
