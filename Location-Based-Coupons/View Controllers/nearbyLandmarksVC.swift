@@ -249,6 +249,14 @@ extension nearbyLandmarksVC : CLLocationManagerDelegate{
                     return categories.contains(category)
                 }
             
+            //You can access filteredItems here, there's a loop below that iterates over each item, which gives you all the
+            // data you'll need to create the dummy data.
+            
+            // After you guys have created the data, there should be a way to create an object with all the relevant
+            // coupon data based on the filteredItems object; you could have a function that returns that, which we can
+            // use in this function to populate the VC the user gets to once access is granted.
+            
+            
             // .placemark = object containing physical location information.
             
             for item in filteredItems {
