@@ -1,14 +1,10 @@
-//
-//  ProfileView.swift
-//  Location-Based-Coupons
-//
-//  Created by Yamil Casarreal on 2/28/24.
-//
-
 import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject var viewModel: AuthViewModel
+    @Environment(\.colorScheme) var colorScheme
+    @State private var isDarkMode = false
+    
     var body: some View {
         ZStack {
             VStack{
@@ -19,7 +15,7 @@ struct ProfileView: View {
                                 Text(user.initials)
                                     .font(.title)
                                     .fontWeight(.semibold)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(colorScheme == .dark ? .white : .black) // Set text color based on theme
                                     .frame(width: 72, height: 72)
                                     .background(Color(.systemGreen))
                                     .clipShape(Circle())
@@ -29,6 +25,7 @@ struct ProfileView: View {
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
                                         .padding(.top, 4)
+                                        .foregroundColor(colorScheme == .dark ? .white : .black) // Set text color based on theme
                                     
                                     Text(user.email)
                                         .font(.footnote)
@@ -37,26 +34,29 @@ struct ProfileView: View {
                             }
                         }
                         
-                        Section ("General") {
+                        Section(header: Text("General").foregroundColor(colorScheme == .dark ? .white : .black)) { // Set section header text color based on theme
                             HStack {
                                 SettingsRowView(imageName: "gear",
                                                 title: "Version",
                                                 tintColor: Color(.systemGray))
+                            
                                 Spacer()
                                 
                                 Text("1.0.0")
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
+                                
                             }
                         }
                         
-                        Section ("Account"){
+                        Section(header: Text("Account").foregroundColor(colorScheme == .dark ? .white : .black)) { // Set section header text color based on theme
                             Button{
                                 viewModel.signout()
                             } label: {
                                 SettingsRowView(imageName: "arrow.left.circle.fill",
                                                 title: "Sign Out",
                                                 tintColor: .red)
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)// DOES NOT WORK
                             }
                             Button {
                                 Task {
@@ -66,6 +66,27 @@ struct ProfileView: View {
                                 SettingsRowView(imageName: "xmark.circle.fill",
                                                 title: "Delete Account",
                                                 tintColor: Color(.systemRed))
+                                    .foregroundColor(colorScheme == .dark ? .white : .black) // DOES NOT WORK
+                            }
+                            Button(action: {
+                                self.isDarkMode.toggle()
+                                UserDefaults.standard.set(self.isDarkMode, forKey: "isDarkMode")
+                                if #available(iOS 13.0, *) {
+                                    UIApplication.shared.windows.forEach { window in
+                                        if let scene = window.windowScene {
+                                            scene.windows.forEach { window in
+                                                window.overrideUserInterfaceStyle = self.isDarkMode ? .dark : .light
+                                            }
+                                        }
+                                    }
+                                }
+                            }) {
+                                SettingsRowView(imageName: isDarkMode ? "sun.max.fill" : "moon.fill",
+                                                title: isDarkMode ? "Switch to Light Theme" : "Switch to Dark Theme",
+                                                tintColor: isDarkMode ? .yellow : .blue)
+                                    .foregroundColor(isDarkMode ? .white : .black) // Set text color based on theme
+                                    .font(.system(size: 24)) // Adjust the font size
+                                    .imageScale(.large) // Adjust the image scale
                             }
                         }
                         
@@ -76,10 +97,17 @@ struct ProfileView: View {
                 CustomProgressView()
             }
         }
+        .onAppear {
+            if let isDarkMode = UserDefaults.standard.object(forKey: "isDarkMode") as? Bool {
+                self.isDarkMode = isDarkMode
+            }
+        }
     }
-        
 }
 
-#Preview {
-    ProfileView()
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
+    }
 }
+
