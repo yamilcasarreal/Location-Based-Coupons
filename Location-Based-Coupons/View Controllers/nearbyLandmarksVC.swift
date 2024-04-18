@@ -1,11 +1,29 @@
+
+
 import UIKit
 import CoreLocation
 import MapKit
 import Contacts
 
+// Creating the model that accepts the landmark data from our search and is used to populate the UITableView
+
+struct Landmark{
+    
+    var name : String
+    
+    var address : String
+    
+    
+}
+
+
 class nearbyLandmarksVC: UIViewController {
     
     let menuButton = UIButton()
+    let profileButton = UIButton()
+    let table = UITableView()
+    var landmarks : [Landmark] = []
+    let currentCatLabel = UILabel()
 
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation?{
@@ -25,19 +43,18 @@ class nearbyLandmarksVC: UIViewController {
     
     func configureUI(){
         
-        configureButton()
+        configureProfileButton()
+        configureMenuButton()
+        configureCurrentCatLabel()
+        configureTableView()
         
     }
     
-    func configureButton(){
+    func configureMenuButton(){
         
         menuButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(menuButton)
-        
-        //add the target for the ab action that calls the function that performs the desired action of pushing the desired VC:
-        
-//        menuButton.addTarget(self, action: #selector(didTap), for: UIControl.Event.touchUpInside)
         
         menuButton.layer.cornerRadius = 10
                 
@@ -47,20 +64,43 @@ class nearbyLandmarksVC: UIViewController {
         
         menuButton.clipsToBounds = true // keeps image from rendering outside the button
         
-        
         menuButton.menu = createMenu()
         
-        menuButton.showsMenuAsPrimaryAction = true
+        menuButton.showsMenuAsPrimaryAction = true // Allows the pop up menu to display when the button is selected.
         
         NSLayoutConstraint.activate([
             
             menuButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             menuButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
             menuButton.heightAnchor.constraint(equalToConstant: 50),
-            menuButton.widthAnchor.constraint(equalToConstant: 50) // we technically don't needs this, but it serves as padding to the content.
+            menuButton.widthAnchor.constraint(equalToConstant: 50)
         ])
         
     }
+    
+    func configureProfileButton(){
+        
+        profileButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(profileButton)
+        
+        profileButton.setTitle("Edit Profile", for: .normal)
+        profileButton.setTitleColor(UIColor.systemBlue, for: .normal) // Won't display if no color is defined
+
+        profileButton.titleLabel?.font = UIFont.systemFont(ofSize: 16 , weight: UIFont.Weight.bold)
+
+
+                        
+        NSLayoutConstraint.activate([
+            
+            profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            profileButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
+            profileButton.heightAnchor.constraint(equalToConstant: 50),
+            profileButton.widthAnchor.constraint(equalToConstant: 100)
+        ])
+        
+    }
+    
     
     func createMenu()-> UIMenu{
         
@@ -68,12 +108,12 @@ class nearbyLandmarksVC: UIViewController {
         
         let menu = UIMenu(title: "Categories" , children: actions)
         
+        
         return menu
     
     }
     
     func createActions() -> [UIAction]{
-        
         
         
         let restaurantFilterAction  = UIAction(title: "Restaurant" , handler: { _ in self.didTap("Restaurant")})
@@ -89,32 +129,116 @@ class nearbyLandmarksVC: UIViewController {
         return menuItems
     }
     
-    @objc func didTap(_ actionTitle : String){
+    @objc func didTap(_ categoryType : String){
         
-        
-        //        let dataToSend : String = "Sent Data"
-        
-        //        let nextVC = nearbyLandmarksVC()
-        
-        //        delegateProperty = nextVC
-        
-        //        delegateProperty?.sendData(dataToSend)
-        
-        //        navigationController?.pushViewController(nextVC, animated: true)
-        
-        print("*****New Search*****\n")
-//
-//        guard let tapQuery : String = button.titleLabel?.text
-//        else{
-//            print("Button titleLabel is nil")
-//            return
-//        }
-        
-        performSearch(actionTitle)
+        performSearch(categoryType)
         
     }
+    
+    func configureCurrentCatLabel(){
         
+        view.addSubview(currentCatLabel)
+        currentCatLabel.translatesAutoresizingMaskIntoConstraints = false
+        currentCatLabel.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
+        currentCatLabel.textAlignment = .center
+
+        
+        NSLayoutConstraint.activate([
+        
+            currentCatLabel.topAnchor.constraint(equalTo: menuButton.bottomAnchor),
+            currentCatLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            currentCatLabel.heightAnchor.constraint(equalToConstant: 50),
+            currentCatLabel.widthAnchor.constraint(equalToConstant: 350)
+        
+        ])
+        
+    }
+    
+    
+    func configureTableView(){
+        
+        view.addSubview(table)
+        
+        table.translatesAutoresizingMaskIntoConstraints = false
+        
+        table.delegate = self
+        table.dataSource = self
+        
+        table.register(SelectableTextCell.self, forCellReuseIdentifier: "SelectableTextCell")
+        
+        table.estimatedRowHeight = 44
+                table.rowHeight = UITableView.automaticDimension
+
+        NSLayoutConstraint.activate([
+            
+           table.topAnchor.constraint(equalTo: currentCatLabel.bottomAnchor),
+           table.leftAnchor.constraint(equalTo: view.leftAnchor),
+           table.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+           table.rightAnchor.constraint(equalTo: view.rightAnchor)
+        
+        ])
+        
+        
+    }
+    
 }
+
+class SelectableTextCell: UITableViewCell {
+    
+    let textView = UITextView()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configureTextView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureTextView() {
+        
+        contentView.addSubview(textView)
+        
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.font = .systemFont(ofSize: 16, weight: .regular)
+        textView.textColor = UIColor.black
+        textView.backgroundColor = UIColor.systemBackground
+        textView.isScrollEnabled = false
+        textView.isEditable = false
+        textView.isSelectable = true
+        textView.isUserInteractionEnabled = true
+        textView.dataDetectorTypes = []
+        
+        NSLayoutConstraint.activate([
+            textView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            textView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            textView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        ])
+    }
+}
+
+extension nearbyLandmarksVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return landmarks.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "SelectableTextCell", for: indexPath) as? SelectableTextCell {
+            let landmark = landmarks[indexPath.row] // instantiating a landmark so we can populate the corresponding cell with the desired data.
+            cell.textView.text = landmark.name + "\n" + landmark.address
+            cell.textLabel?.numberOfLines = 0 // Allow multi-line text
+            return cell
+        } else {
+            fatalError("Failed to dequeue SelectableTextCell")
+        }
+    }
+}
+
+
 
 extension nearbyLandmarksVC : CLLocationManagerDelegate{
     
@@ -205,6 +329,8 @@ extension nearbyLandmarksVC : CLLocationManagerDelegate{
     
     func performSearch(_ query: String) {
         
+        currentCatLabel.text = "\(query) Coupons"
+        
         guard let location = currentLocation else {
             print("Current location is not available.")
             return
@@ -221,19 +347,22 @@ extension nearbyLandmarksVC : CLLocationManagerDelegate{
         
         let search = MKLocalSearch(request: request)
         
-        search.start { response, error in
-                if let error = error {
-                    print("Search error: \(error.localizedDescription)")
-                    return
-                }
-                guard let response = response, !response.mapItems.isEmpty else {
-                    print("No results were found.")
-                    return
-                }
+//casting response as a weak reference so that we can deallocate the VC even when data is being fetched for the response object:
+        
+           search.start { [weak self] response, error in
+               guard let strongSelf = self else { return }// guards against self = nil and creates a reference to self called strongSelf.
+               if let error = error {
+                   print("Search error: \(error.localizedDescription)")
+                   return
+               }
+               guard let response = response, !response.mapItems.isEmpty else {
+                   print("No results were found.")
+                   return
+               }
             
             // Filtering mapItems and returning
             
-            let categories = self.returnCat(query)
+            let categories = strongSelf.returnCat(query)
     
             
             let filteredItems = response.mapItems.filter { item in
@@ -248,14 +377,9 @@ extension nearbyLandmarksVC : CLLocationManagerDelegate{
                 
                     return categories.contains(category)
                 }
-            
-            //You can access filteredItems here, there's a loop below that iterates over each item, which gives you all the
-            // data you'll need to create the dummy data.
-            
-            // After you guys have created the data, there should be a way to create an object with all the relevant
-            // coupon data based on the filteredItems object; you could have a function that returns that, which we can
-            // use in this function to populate the VC the user gets to once access is granted.
-            
+               
+               strongSelf.landmarks.removeAll() // clearing all the old items from the model instance so that we only load the table with new data.
+
             
             // .placemark = object containing physical location information.
             
@@ -264,14 +388,14 @@ extension nearbyLandmarksVC : CLLocationManagerDelegate{
                 if let postalAddress = item.placemark.postalAddress {
                     let formattedAddress = CNPostalAddressFormatter.string(from: postalAddress, style: .mailingAddress)
                     
-              // add a condtion here that checks for irrelevant categories and skips to the next item if true.
+                    let landmark = Landmark(name : item.name ?? "no name" , address: formattedAddress)
                     
-                    print("Name: \(item.name ?? "No name") , \nCategory: \(item.pointOfInterestCategory?.rawValue ?? "Unknown Category"), \nAddress:\(formattedAddress)\n") // rawValue = A string that represents the point of interest category.
-                } else {
-                    // Fallback in case postalAddress is nil
-                    print("Name: \(item.name ?? "No name"), Location: \(item.placemark.coordinate)")
+                    strongSelf.landmarks.append(landmark)
+                    
                 }
             }
+            
+            strongSelf.table.reloadData() // reload all visible data in table view.
         }
     }
 
