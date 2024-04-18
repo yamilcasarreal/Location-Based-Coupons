@@ -11,6 +11,7 @@ struct SettingsRowView: View {
     let imageName: String
     let title: String
     let tintColor: Color
+    let titleColor: Color
     var body: some View {
         HStack (spacing: 12) {
             Image(systemName: imageName)
@@ -19,11 +20,11 @@ struct SettingsRowView: View {
                 .foregroundColor(tintColor)
             Text (title)
                 .font(.subheadline)
-                .foregroundColor(.black)
+                .foregroundColor(titleColor)
         }
     }
 }
 
-#Preview {
-    SettingsRowView(imageName: "gear", title: "version", tintColor: Color(.systemGray))
-}
+//#Preview {
+//    SettingsRowView(imageName: "gear", title: "version", tintColor: Color(.systemGray))
+//}

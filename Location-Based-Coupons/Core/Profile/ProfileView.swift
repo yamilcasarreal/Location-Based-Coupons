@@ -38,7 +38,8 @@ struct ProfileView: View {
                             HStack {
                                 SettingsRowView(imageName: "gear",
                                                 title: "Version",
-                                                tintColor: Color(.systemGray))
+                                                tintColor: Color(.systemGray),
+                                                titleColor: colorScheme == .dark ? .white : .black)
                             
                                 Spacer()
                                 
@@ -55,8 +56,8 @@ struct ProfileView: View {
                             } label: {
                                 SettingsRowView(imageName: "arrow.left.circle.fill",
                                                 title: "Sign Out",
-                                                tintColor: .red)
-                                    .foregroundColor(colorScheme == .dark ? .white : .black)// DOES NOT WORK
+                                                tintColor: .red,
+                                                titleColor: colorScheme == .dark ? .white : .black)
                             }
                             Button {
                                 Task {
@@ -65,8 +66,8 @@ struct ProfileView: View {
                             } label: {
                                 SettingsRowView(imageName: "xmark.circle.fill",
                                                 title: "Delete Account",
-                                                tintColor: Color(.systemRed))
-                                    .foregroundColor(colorScheme == .dark ? .white : .black) // DOES NOT WORK
+                                                tintColor: Color(.systemRed),
+                                                titleColor: colorScheme == .dark ? .white : .black)
                             }
                             Button(action: {
                                 self.isDarkMode.toggle()
@@ -83,10 +84,8 @@ struct ProfileView: View {
                             }) {
                                 SettingsRowView(imageName: isDarkMode ? "sun.max.fill" : "moon.fill",
                                                 title: isDarkMode ? "Switch to Light Theme" : "Switch to Dark Theme",
-                                                tintColor: isDarkMode ? .yellow : .blue)
-                                    .foregroundColor(isDarkMode ? .white : .black) // Set text color based on theme
-                                    .font(.system(size: 24)) // Adjust the font size
-                                    .imageScale(.large) // Adjust the image scale
+                                                tintColor: isDarkMode ? .yellow : .blue,
+                                                titleColor: colorScheme == .dark ? .white : .black)
                             }
                         }
                         
