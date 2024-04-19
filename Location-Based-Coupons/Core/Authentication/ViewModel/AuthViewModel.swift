@@ -43,23 +43,7 @@ class AuthViewModel: ObservableObject {
             await fetchUser()
             isLoading = false
         } catch {
-//                if let authError = AuthErrorCode.Code(rawValue: (error as NSError).code) {
-//
-//                    switch authError {
-//                        case .wrongPassword:
-//                            self.authError = AuthError(authErrorCode: .wrongPassword)
-//                            
-//                            
-//                        case .invalidEmail:
-//                            self.authError = AuthError(authErrorCode: .invalidEmail)
-//                            
-//                            
-//                        default:
-//                            print("Error: \(error.localizedDescription)")
-//                    }
-//                    
-//                }
-                
+
             let authError = AuthErrorCode.Code(rawValue: (error as NSError).code)
             self.showAlert = true
             self.authError = AuthError(authErrorCode: authError ?? .userNotFound)
@@ -86,6 +70,16 @@ class AuthViewModel: ObservableObject {
             isLoading = false
         }
     }
+    
+    func editUser(fullName: String) async throws {
+        let user = Auth.auth().currentUser
+        let uUid = user!.uid
+        let db = Firestore.firestore()
+        try await db.collection("users").document("\(uUid)").updateData(["fullName": fullName])
+        try await user?.reload()
+        //print(user?.email)
+    }
+    
     
     func signout() {
         do {

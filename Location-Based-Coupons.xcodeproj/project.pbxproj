@@ -18,6 +18,7 @@
 		7A1932B02B8FA623005BF32B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1932AF2B8FA623005BF32B /* ProfileView.swift */; };
 		7A1932B22B8FA826005BF32B /* SettingsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1932B12B8FA826005BF32B /* SettingsRowView.swift */; };
 		7A1932B42B8FAA69005BF32B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1932B32B8FAA69005BF32B /* User.swift */; };
+		7A1CE5042BD2A46300CCD646 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1CE5032BD2A46300CCD646 /* EditProfileView.swift */; };
 		7ABFA2682BBD0E4A00D5DC3F /* AuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABFA2672BBD0E4A00D5DC3F /* AuthError.swift */; };
 		7ABFA26A2BBD0FBB00D5DC3F /* CustomLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABFA2692BBD0FBB00D5DC3F /* CustomLoadingView.swift */; };
 		7ABFA26C2BBD142E00D5DC3F /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABFA26B2BBD142E00D5DC3F /* ResetPasswordView.swift */; };
@@ -89,6 +90,7 @@
 		7A1932AF2B8FA623005BF32B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		7A1932B12B8FA826005BF32B /* SettingsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRowView.swift; sourceTree = "<group>"; };
 		7A1932B32B8FAA69005BF32B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		7A1CE5032BD2A46300CCD646 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		7ABFA2672BBD0E4A00D5DC3F /* AuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthError.swift; sourceTree = "<group>"; };
 		7ABFA2692BBD0FBB00D5DC3F /* CustomLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLoadingView.swift; sourceTree = "<group>"; };
 		7ABFA26B2BBD142E00D5DC3F /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 		7A1932A52B8E7885005BF32B /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				7A1CE5032BD2A46300CCD646 /* EditProfileView.swift */,
 				7A1932AF2B8FA623005BF32B /* ProfileView.swift */,
 			);
 			path = Profile;
@@ -404,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A1CE5042BD2A46300CCD646 /* EditProfileView.swift in Sources */,
 				7AF859F42B93C00400722F3E /* AuthViewModel.swift in Sources */,
 				7A1932AC2B8E7CCC005BF32B /* SignInButton.swift in Sources */,
 				7A1932A82B8E78B1005BF32B /* LoginView.swift in Sources */,
