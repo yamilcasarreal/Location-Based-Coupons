@@ -5,10 +5,6 @@ import CoreLocation
 import MapKit
 import Contacts
 
-
-
-
-
 // Creating the model that accepts the landmark data from our search and is used to populate the UITableView
 
 struct Landmark{
