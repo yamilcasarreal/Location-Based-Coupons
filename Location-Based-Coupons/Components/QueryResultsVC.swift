@@ -3,7 +3,47 @@ import UIKit
 import CoreLocation
 import MapKit
 import Contacts
+import Foundation
 
+//randomly generates date between two dates
+extension Date {
+    
+    static func randomBetween(start: String, end: String, format: String = "yyyy-MM-dd") -> String {
+        let date1 = Date.parse(start, format: format)
+        let date2 = Date.parse(end, format: format)
+        return Date.randomBetween(start: date1, end: date2).dateString(format)
+    }
+
+    static func randomBetween(start: Date, end: Date) -> Date {
+
+    // - - - - - - - - - - - - CHANGES START HERE - - - - - - - - - - - - //
+        let date1 = min(start, end)
+        var date2 = max(start, end)
+        
+        if date1 == date2 {
+            date2 = date1.addingTimeInterval(120)
+        }
+    // - - - - - - - - - - - - CHANGES END HERE - - - - - - - - - - - - //
+
+        let span = TimeInterval.random(in: date1.timeIntervalSinceNow...date2.timeIntervalSinceNow)
+        return Date(timeIntervalSinceNow: span)
+    }
+
+    func dateString(_ format: String = "yyyy-MM-dd") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: self)
+    }
+
+    static func parse(_ string: String, format: String = "yyyy-MM-dd") -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = NSTimeZone.default
+        dateFormatter.dateFormat = format
+
+        let date = dateFormatter.date(from: string)!
+        return date
+    }
+}
 class QueryResultsVC: UIViewController {
     
     // Location manager to handle location services
@@ -92,6 +132,8 @@ extension QueryResultsVC: CLLocationManagerDelegate {
                 return categories.contains(category)
             }
             
+            let date1 = "2024-04-10"
+            let date2 = "2024-05-10"
             // Iterate through the filtered items
             for item in filteredItems {
                 // Format the address
@@ -106,11 +148,13 @@ extension QueryResultsVC: CLLocationManagerDelegate {
                     // Generate a random coupon code
                     let couponCode = self.generateRandomCouponCode(length: 10)
                     
+                    let date = Date.randomBetween(start: date1, end:date2)
                     // Print the store details
                     print("""
                         Name: \(item.name ?? "No name"),
                         Category: \(item.pointOfInterestCategory?.rawValue ?? "Unknown Category"),
                         Address: \(formattedAddress),
+                        Until: \(date),
                         Distance: \(String(format: "%.2f", distance)) miles,
                         Coupon Code: \(couponCode)
                         """)
@@ -128,4 +172,6 @@ extension QueryResultsVC: CLLocationManagerDelegate {
         let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map { _ in letters.randomElement()! })
     }
+    
+    
 }

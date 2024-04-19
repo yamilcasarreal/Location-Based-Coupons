@@ -9,6 +9,7 @@ struct Landmark: Hashable {
     var address: String
 }
 
+
 class nearbyLandmarksVC: UIViewController {
     
     let menuButton = UIButton()
@@ -16,7 +17,7 @@ class nearbyLandmarksVC: UIViewController {
     let table = UITableView()
     var landmarks: [Landmark] = []
     let currentCatLabel = UILabel()
-    var landmarkDiscounts: [Landmark: (discount: Int, couponCode: String)] = [:]
+    var landmarkDiscounts: [Landmark: (date:String, discount: Int, couponCode: String)] = [:]
 
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation? {
@@ -24,6 +25,8 @@ class nearbyLandmarksVC: UIViewController {
             performSearch("Store")
         }
     }
+    let currentDate = Date()
+    let formatter = DateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -211,29 +214,36 @@ extension nearbyLandmarksVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        formatter.dateFormat = "YYYY-MM-dd"
+        let res = formatter.string(from: currentDate)
         if let cell = tableView.dequeueReusableCell(withIdentifier: "SelectableTextCell", for: indexPath) as? SelectableTextCell {
             let landmark = landmarks[indexPath.row]
             let discountInfo = landmarkDiscounts[landmark]
             let discount = discountInfo?.discount ?? 0
             let couponCode = discountInfo?.couponCode ?? "CODE"
+            let date3 = discountInfo?.date ?? "1/1/2024"
+            if(date3 >= res){
+                let attributedString = NSMutableAttributedString(string: "\(landmark.name)\n\(landmark.address)\nDiscount: \(discount)%\nCoupon Code: \(couponCode)\nUntil: \(date3)")
             
-            let attributedString = NSMutableAttributedString(string: "\(landmark.name)\n\(landmark.address)\nDiscount: \(discount)%\nCoupon Code: \(couponCode)")
-            
-            let storeNameRange = (attributedString.string as NSString).range(of: landmark.name)
-            let discountRange = (attributedString.string as NSString).range(of: "Discount: \(discount)%")
-            let couponCodeRange = (attributedString.string as NSString).range(of: "Coupon Code: \(couponCode)")
-            
-            attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 18), range: storeNameRange)
-            attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 16), range: discountRange)
-            attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 16), range: couponCodeRange)
-            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.green, range: couponCodeRange)
-            
-            cell.textView.attributedText = attributedString
+                let storeNameRange = (attributedString.string as NSString).range(of: landmark.name)
+                let discountRange = (attributedString.string as NSString).range(of: "Discount: \(discount)%")
+                let couponCodeRange = (attributedString.string as NSString).range(of: "Coupon Code: \(couponCode)")
+                
+                attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 18), range: storeNameRange)
+                attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 16), range: discountRange)
+                attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 16), range: couponCodeRange)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.green, range: couponCodeRange)
+                cell.textView.attributedText = attributedString
+            }
+            else{
+                cell.isHidden = true
+            }
             return cell
         } else {
             fatalError("Failed to dequeue SelectableTextCell")
         }
     }
+    
 }
 
 extension nearbyLandmarksVC: CLLocationManagerDelegate {
@@ -319,18 +329,19 @@ extension nearbyLandmarksVC: CLLocationManagerDelegate {
             }
             
             strongSelf.landmarks.removeAll()
-            
+            let date1 = "2024-04-15"
+            let date2 = "2024-05-20"
             for item in filteredItems {
                 if let postalAddress = item.placemark.postalAddress {
                     let formattedAddress = CNPostalAddressFormatter.string(from: postalAddress, style: .mailingAddress)
                     let landmark = Landmark(name: item.name ?? "no name", address: formattedAddress)
-                    
-                    if let (_, _) = strongSelf.landmarkDiscounts[landmark] {
+                    let date = Date.randomBetween(start: date1, end:date2)
+                    if let (_, _, _) = strongSelf.landmarkDiscounts[landmark] {
                         strongSelf.landmarks.append(landmark)
                     } else {
                         let discount = [5, 10, 15, 20].randomElement() ?? 0
                         let couponCode = UUID().uuidString.split(separator: "-").first ?? "CODE"
-                        strongSelf.landmarkDiscounts[landmark] = (discount, String(couponCode))
+                        strongSelf.landmarkDiscounts[landmark] = (date,discount, String(couponCode))
                         strongSelf.landmarks.append(landmark)
                     }
                 }
