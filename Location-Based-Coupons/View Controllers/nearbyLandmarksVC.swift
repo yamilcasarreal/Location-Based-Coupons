@@ -91,6 +91,8 @@ class nearbyLandmarksVC: UIViewController {
         profileButton.setTitleColor(UIColor.systemBlue, for: .normal) // Won't display if no color is defined
 
         profileButton.titleLabel?.font = UIFont.systemFont(ofSize: 16 , weight: UIFont.Weight.bold)
+        
+        profileButton.addTarget(self, action: #selector(profileButtonTouch), for: UIControl.Event.touchUpInside)
 
 
                         
@@ -101,6 +103,16 @@ class nearbyLandmarksVC: UIViewController {
             profileButton.heightAnchor.constraint(equalToConstant: 50),
             profileButton.widthAnchor.constraint(equalToConstant: 100)
         ])
+        
+    }
+    
+    @objc func profileButtonTouch()
+    {
+        let nextVC = ProfileView()
+        
+        let hostingController = UIHostingController(rootView: nextVC)
+        
+        navigationController?.pushViewController(hostingController, animated: true)
         
     }
     

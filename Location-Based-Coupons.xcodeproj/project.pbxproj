@@ -75,6 +75,7 @@
 		7AFEF97A2BC5B38E00DF3964 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 7AFEF9792BC5B38E00DF3964 /* FirebaseStorage */; };
 		7AFEF97C2BC5B38E00DF3964 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 7AFEF97B2BC5B38E00DF3964 /* FirebaseStorageCombine-Community */; };
 		BF092C5E2BCA088A009099C9 /* nearbyLandmarksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF092C5D2BCA088A009099C9 /* nearbyLandmarksVC.swift */; };
+		BF7FAF592BD31B9A00A7207C /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7FAF582BD31B9A00A7207C /* TestVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +97,7 @@
 		7AF859F32B93C00400722F3E /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		7AFEF9442BC5B35600DF3964 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		BF092C5D2BCA088A009099C9 /* nearbyLandmarksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nearbyLandmarksVC.swift; sourceTree = "<group>"; };
+		BF7FAF582BD31B9A00A7207C /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestVC.swift; path = "Location-Based-Coupons/View Controllers/TestVC.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				7A073A102B8D11150004EC0B /* ContentView.swift */,
+				BF7FAF582BD31B9A00A7207C /* TestVC.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -425,6 +428,7 @@
 				7ABFA26C2BBD142E00D5DC3F /* ResetPasswordView.swift in Sources */,
 				7A1932AE2B8E7FCA005BF32B /* RegistrationView.swift in Sources */,
 				7A1932B42B8FAA69005BF32B /* User.swift in Sources */,
+				BF7FAF592BD31B9A00A7207C /* TestVC.swift in Sources */,
 				7A073A112B8D11150004EC0B /* ContentView.swift in Sources */,
 				7A1932B02B8FA623005BF32B /* ProfileView.swift in Sources */,
 				7ABFA26A2BBD0FBB00D5DC3F /* CustomLoadingView.swift in Sources */,
