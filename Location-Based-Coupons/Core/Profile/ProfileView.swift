@@ -4,6 +4,8 @@ struct ProfileView: View {
     @EnvironmentObject var viewModel: AuthViewModel
     @Environment(\.colorScheme) var colorScheme
     @State private var isDarkMode = false
+    @State private var showAlert = false
+
     
     var body: some View {
         NavigationStack{
@@ -58,7 +60,7 @@ struct ProfileView: View {
                                 NavigationStack {
                                     NavigationLink{
                                         EditProfileView()
-                                        //.navigationBarBackButtonHidden(true)
+                                        .navigationBarBackButtonHidden(true)
                                     } label: {
                                         SettingsRowView(imageName: "circle.fill",
                                                         title: "Edit Profile",
@@ -69,7 +71,8 @@ struct ProfileView: View {
                                 
                                 Button {
                                     viewModel.sendResetPasswordLink(toEmail: user.email)
-                                    viewModel.signout()
+                                    showAlert = true
+                                    //viewModel.signout()
                                 } label: {
                                     SettingsRowView(imageName: "circle.fill",
                                                     title: "Reset Password",
@@ -117,6 +120,11 @@ struct ProfileView: View {
                             
                         }
                     }
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text(""), message: Text("A reset password link has been sent to your email, you will now be signed out"), dismissButton: .default(Text("Ok"), action: {
+                        viewModel.signout()
+                    }))
                 }
                 if viewModel.isLoading {
                     CustomProgressView()

@@ -11,6 +11,7 @@ struct EditProfileView: View {
     @State private var fullname = ""
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var viewModel: AuthViewModel
+    @State private var showAlert = false
 
     var body: some View {
         ZStack {
@@ -40,8 +41,10 @@ struct EditProfileView: View {
                 Button {
                     Task {
                         try await viewModel.editUser(fullName: fullname)
+                        showAlert = true
                         
-                        dismiss()
+                        
+                        //dismiss()
                         
                     }
                 } label: {
@@ -53,6 +56,7 @@ struct EditProfileView: View {
                     .foregroundColor(.white)
                     .frame(width: UIScreen.main.bounds.width - 32, height: 48)
                 }
+                
                 .background(Color(.systemGreen))
                 .cornerRadius(30)
                 .padding(.top, 24)
@@ -60,7 +64,7 @@ struct EditProfileView: View {
                 .opacity(formIsValid ? 1.0 : 0.5)
                 
                 Spacer()
-                
+                //.alert("Alert", isPresented: $showAlert)
                 Button {
                     dismiss()
                 } label: {
@@ -77,9 +81,10 @@ struct EditProfileView: View {
                 CustomProgressView()
             }
         }
-        .alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text("Error"),
-                  message: Text(viewModel.authError?.description ?? ""))
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text(""), message: Text("Please log out and log in to see changes"), dismissButton: .default(Text("Ok"), action: {
+                dismiss()
+            }))
         }
     }
 }
