@@ -27,3 +27,4 @@ struct Location_Based_CouponsApp: App {
         }
     }
 }
+

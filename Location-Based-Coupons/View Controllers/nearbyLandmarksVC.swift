@@ -1,9 +1,13 @@
 
-
+import SwiftUI
 import UIKit
 import CoreLocation
 import MapKit
 import Contacts
+
+
+
+
 
 // Creating the model that accepts the landmark data from our search and is used to populate the UITableView
 
@@ -12,7 +16,6 @@ struct Landmark{
     var name : String
     
     var address : String
-    
     
 }
 
@@ -328,7 +331,6 @@ extension nearbyLandmarksVC : CLLocationManagerDelegate{
     }
     
     func performSearch(_ query: String) {
-        
         currentCatLabel.text = "\(query) Coupons"
         
         guard let location = currentLocation else {

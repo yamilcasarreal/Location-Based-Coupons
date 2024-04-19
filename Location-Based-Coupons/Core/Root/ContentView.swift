@@ -5,6 +5,25 @@
 //  Created by Yamil Casarreal on 2/26/24.
 //
 
+import UIKit
+import CoreLocation
+import MapKit
+import Contacts
+
+struct NearbyLandmarksVCRepresentable: UIViewControllerRepresentable {
+    
+    func makeUIViewController(context: Context) -> nearbyLandmarksVC {
+        // Instantiate the nearbyLandmarksVC here
+        return nearbyLandmarksVC()
+    }
+    
+    func updateUIViewController(_ uiViewController: nearbyLandmarksVC, context: Context) {
+        // Update the view controller if needed
+    }
+}
+
+
+
 import SwiftUI
 
 struct ContentView: View {
@@ -13,7 +32,7 @@ struct ContentView: View {
     var body: some View {
         Group{
             if viewModel.userSession != nil {
-                ProfileView()
+                NearbyLandmarksVCRepresentable()
             }
             else {
                 LoginView()
