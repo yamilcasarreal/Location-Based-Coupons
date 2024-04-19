@@ -83,7 +83,7 @@ class nearbyLandmarksVC: UIViewController {
         
         view.addSubview(profileButton)
         
-        profileButton.setTitle("Edit Profile", for: .normal)
+        profileButton.setTitle("Show Profile", for: .normal)
         profileButton.setTitleColor(UIColor.systemBlue, for: .normal) // Won't display if no color is defined
 
         profileButton.titleLabel?.font = UIFont.systemFont(ofSize: 16 , weight: UIFont.Weight.bold)
@@ -94,7 +94,7 @@ class nearbyLandmarksVC: UIViewController {
                         
         NSLayoutConstraint.activate([
             
-            profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             profileButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
             profileButton.heightAnchor.constraint(equalToConstant: 50),
             profileButton.widthAnchor.constraint(equalToConstant: 100)
