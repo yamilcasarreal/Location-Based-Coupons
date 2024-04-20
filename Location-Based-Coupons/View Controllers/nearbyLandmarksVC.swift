@@ -252,6 +252,16 @@ extension nearbyLandmarksVC: UITableViewDelegate, UITableViewDataSource {
                 attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 18), range: storeNameRange)
                 attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 16), range: discountRange)
                 attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 16), range: couponCodeRange)
+                
+                if #available(iOS 13.0, *) {
+                    let dynamicColor = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+                        return traitCollection.userInterfaceStyle == .dark ? .white : .black
+                    }
+                    attributedString.addAttribute(.foregroundColor, value: dynamicColor, range: NSRange(location: 0, length: attributedString.length))
+                } else {
+                    attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: NSRange(location: 0, length: attributedString.length))
+                }
+                
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.green, range: couponCodeRange)
                 cell.textView.attributedText = attributedString
             }
