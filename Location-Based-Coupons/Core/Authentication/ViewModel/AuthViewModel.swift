@@ -28,6 +28,7 @@ class AuthViewModel: ObservableObject {
     init() {
         userSession = Auth.auth().currentUser
         
+        
         Task {
             isLoading = true
             await fetchUser()
@@ -103,7 +104,13 @@ class AuthViewModel: ObservableObject {
     }
     
     func sendResetPasswordLink(toEmail email: String) {
-        Auth.auth().sendPasswordReset(withEmail: email)
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+                   DispatchQueue.main.async {
+                       
+                   }
+               }
+        //Auth.auth().sendPasswordReset(withEmail: email)
+        
     }
     
     func fetchUser() async {

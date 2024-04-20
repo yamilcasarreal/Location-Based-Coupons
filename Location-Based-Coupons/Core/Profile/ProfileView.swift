@@ -5,13 +5,23 @@ struct ProfileView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var isDarkMode = false
     @State private var showAlert = false
+    
 
     
     var body: some View {
         NavigationStack{
             ZStack {
                 VStack{
+//                    Button {
+//                        viewModel.signout()
+//                    } label: {
+//                        SettingsRowView(imageName: "circle.fill",
+//                                        title: "Reset Password",
+//                                        tintColor: Color(.systemGreen),
+//                                        titleColor: colorScheme == .dark ? .white : .black)
+//                    }
                     if let user = viewModel.currentUser {
+                        
                         
                         List {
                             Section {

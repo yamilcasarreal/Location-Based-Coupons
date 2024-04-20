@@ -25,6 +25,8 @@ struct ResetPasswordView: View {
                       title: "Email Address",
                       placeholder: "Enter the email associated with your account")
             .padding()
+            .autocapitalization(.none)
+
             
             Button {
                 viewModel.sendResetPasswordLink(toEmail: email)
@@ -33,11 +35,12 @@ struct ResetPasswordView: View {
                 HStack {
                     Text("SEND RESET LINK")
                         .fontWeight(.semibold)
-                    Image(systemName: "arrow.right")
                 }
                 .foregroundColor(.white)
                 .frame(width: UIScreen.main.bounds.width - 32, height: 50)
             }
+            .disabled(!formIsValid)
+            .opacity(formIsValid ? 1.0 : 0.5)
             .background(Color(.systemGreen))
             .cornerRadius(10)
             .padding()
@@ -61,7 +64,12 @@ struct ResetPasswordView: View {
         }
     }
 }
-
+extension ResetPasswordView: AuthenticationFormProtocol{
+    var formIsValid: Bool {
+        return !email.isEmpty
+        && email.contains("@")
+    }
+}
 #Preview {
     ResetPasswordView()
 }
