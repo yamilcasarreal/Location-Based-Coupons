@@ -1,4 +1,5 @@
 //Comment Check
+import SwiftUI
 import UIKit
 import CoreLocation
 import MapKit
@@ -74,10 +75,11 @@ class nearbyLandmarksVC: UIViewController {
         profileButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(profileButton)
         
-        profileButton.setTitle("Edit Profile", for: .normal)
-        profileButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        profileButton.setTitle("Show Profile", for: .normal)
+        profileButton.setTitleColor(UIColor.systemGreen, for: .normal)
         profileButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold)
-        
+        profileButton.addTarget(self, action: #selector(profileButtonTouch), for: UIControl.Event.touchUpInside)
+
         NSLayoutConstraint.activate([
             profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             profileButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
@@ -85,6 +87,15 @@ class nearbyLandmarksVC: UIViewController {
             profileButton.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
+    @objc func profileButtonTouch()
+        {
+            let nextVC = ProfileView()
+            
+            let hostingController = UIHostingController(rootView: nextVC)
+            
+            navigationController?.pushViewController(hostingController, animated: true)
+            
+        }
     
     func createMenu() -> UIMenu {
         let actions = createActions()
@@ -181,7 +192,7 @@ class SelectableTextCell: UITableViewCell {
         contentView.addSubview(mapButton)
         mapButton.translatesAutoresizingMaskIntoConstraints = false
         mapButton.setTitle("View on Map", for: .normal)
-        mapButton.setTitleColor(.blue, for: .normal)
+        mapButton.setTitleColor(.green, for: .normal)
         mapButton.addTarget(self, action: #selector(openInMaps), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
