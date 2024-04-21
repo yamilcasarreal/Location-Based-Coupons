@@ -366,7 +366,7 @@ extension nearbyLandmarksVC: CLLocationManagerDelegate {
                         let formattedAddress = CNPostalAddressFormatter.string(from: postalAddress, style: .mailingAddress)
                         let landmark = Landmark(name: item.name ?? "no name", address: formattedAddress)
                        
-                        let randomNumber = arc4random_uniform(25)
+                        let randomNumber = arc4random_uniform(50)
                         let db = Firestore.firestore()
                         
                         var discount = "f"
