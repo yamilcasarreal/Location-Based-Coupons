@@ -192,7 +192,7 @@ class SelectableTextCell: UITableViewCell {
         contentView.addSubview(mapButton)
         mapButton.translatesAutoresizingMaskIntoConstraints = false
         
-        let buttonColor = UIColor(red: 112/255.0, green: 197/255.0, blue: 111/255.0 , alpha: 1)
+        let buttonColor = UIColor(red: 76/255.0, green: 163/255.0, blue: 75/255.0 , alpha: 1)
 
         mapButton.setTitle("View on Map", for: .normal)
         mapButton.setTitleColor(buttonColor, for: .normal)
