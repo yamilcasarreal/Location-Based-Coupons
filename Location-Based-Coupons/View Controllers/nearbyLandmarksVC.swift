@@ -28,6 +28,9 @@ class nearbyLandmarksVC: UIViewController {
     let currentCatLabel = UILabel()
     var landmarkDiscounts: [Landmark: (date:String, discount: String, couponCode: String)] = [:]
     
+    var activityIndicator: UIActivityIndicatorView?
+
+    
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation? {
         didSet {
@@ -50,6 +53,7 @@ class nearbyLandmarksVC: UIViewController {
         configureMenuButton()
         configureCurrentCatLabel()
         configureTableView()
+        configureActivityIndicator()
     }
     
     func configureMenuButton() {
@@ -134,6 +138,22 @@ class nearbyLandmarksVC: UIViewController {
             currentCatLabel.widthAnchor.constraint(equalToConstant: 350)
         ])
     }
+    
+    func configureActivityIndicator() {
+                // Initialize and configure the activity indicator
+                let indicator = UIActivityIndicatorView(style: .large)
+                indicator.translatesAutoresizingMaskIntoConstraints = false
+                view.addSubview(indicator)
+                indicator.hidesWhenStopped = true
+
+                NSLayoutConstraint.activate([
+                    indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                    indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+                ])
+
+                // Assign the local indicator to the class property
+                activityIndicator = indicator
+            }
     
     func configureTableView() {
         view.addSubview(table)
@@ -327,84 +347,93 @@ extension nearbyLandmarksVC: CLLocationManagerDelegate {
     }
     
     func performSearch(_ query: String) {
-        currentCatLabel.text = "\(query) Coupons"
-        
-        guard let location = currentLocation else {
-            print("Current location is not available.")
-            return
-        }
-        
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = query
-        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-        request.region = region
-        
-        let search = MKLocalSearch(request: request)
-        
-        search.start { [weak self] response, error in
-            guard let strongSelf = self else { return }
             
-            if let error = error {
-                print("Search error: \(error.localizedDescription)")
+            currentCatLabel.text = "\(query) Coupons"
+            
+            activityIndicator?.startAnimating()
+            
+            guard let location = currentLocation else {
+                print("Current location is not available.")
+                activityIndicator?.startAnimating()
                 return
             }
             
-            guard let response = response, !response.mapItems.isEmpty else {
-                print("No results were found.")
-                return
-            }
+            let request = MKLocalSearch.Request()
+            request.naturalLanguageQuery = query
+            let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+            request.region = region
             
-            let categories = strongSelf.returnCat(query)
+            let search = MKLocalSearch(request: request)
             
-            let filteredItems = response.mapItems.filter { item in
-                guard let category = item.pointOfInterestCategory else { return false }
-                return categories.contains(category)
-            }
-            
-            strongSelf.landmarks.removeAll()
-            //put in task since retriving from database is async
-            Task{
-                for item in filteredItems {
-                    if let postalAddress = item.placemark.postalAddress {
-                        let formattedAddress = CNPostalAddressFormatter.string(from: postalAddress, style: .mailingAddress)
-                        let landmark = Landmark(name: item.name ?? "no name", address: formattedAddress)
-                       
-                        let randomNumber = arc4random_uniform(50)
-                        let db = Firestore.firestore()
-                        
-                        var discount = "f"
-                        var couponCode = "F"
-                        var date = "f"
-                        
-                        
-                        //get coupon code, description, and experation date from datebase
-                        do{
-                            let snapshot = try await db.collection("code").whereField("num", isEqualTo: randomNumber).getDocuments()
-                            for documents in snapshot.documents{
-                                //print("\(documents.data())")
-                                couponCode = documents.get("code")! as! String
-                                discount = documents.get("desc")! as! String
-                                date = documents.get("date")! as! String
-                            }
-                        }
-                        
-                        
-                        if let (_, _, _) = strongSelf.landmarkDiscounts[landmark] {
-                            strongSelf.landmarks.append(landmark)
-                        } else {
-                            /*let discount = [5, 10, 15, 20].randomElement() ?? 0
-                             let couponCode = UUID().uuidString.split(separator: "-").first ?? "CODE"*/
-                            strongSelf.landmarkDiscounts[landmark] = (date,discount, String(couponCode))
-                            strongSelf.landmarks.append(landmark)
-                        }
-                    }
+            search.start { [weak self] response, error in
+                guard let strongSelf = self else { return }
+                
+                if let error = error {
+                    print("Search error: \(error.localizedDescription)")
+                    strongSelf.activityIndicator?.stopAnimating()
+                    return
                 }
                 
+                guard let response = response, !response.mapItems.isEmpty else {
+                    print("No results were found.")
+                    strongSelf.activityIndicator?.stopAnimating()
+                    return
+                }
                 
-                strongSelf.table.reloadData()
+                let categories = strongSelf.returnCat(query)
+                
+                let filteredItems = response.mapItems.filter { item in
+                    guard let category = item.pointOfInterestCategory else { return false }
+                    return categories.contains(category)
+                }
+                
+                strongSelf.landmarks.removeAll()
+                //put in task since retriving from database is async
+                Task{
+                    for item in filteredItems {
+                        if let postalAddress = item.placemark.postalAddress {
+                            let formattedAddress = CNPostalAddressFormatter.string(from: postalAddress, style: .mailingAddress)
+                            let landmark = Landmark(name: item.name ?? "no name", address: formattedAddress)
+                           
+                            let randomNumber = arc4random_uniform(50)
+                            let db = Firestore.firestore()
+                            
+                            var discount = "f"
+                            var couponCode = "F"
+                            var date = "f"
+                            
+                            
+                            //get coupon code, description, and experation date from datebase
+                            do{
+                                let snapshot = try await db.collection("code").whereField("num", isEqualTo: randomNumber).getDocuments()
+                                for documents in snapshot.documents{
+                                    //print("\(documents.data())")
+                                    couponCode = documents.get("code")! as! String
+                                    discount = documents.get("desc")! as! String
+                                    date = documents.get("date")! as! String
+                                }
+                            }
+                            
+                            
+                            if let (_, _, _) = strongSelf.landmarkDiscounts[landmark] {
+                                strongSelf.landmarks.append(landmark)
+                            } else {
+                                /*let discount = [5, 10, 15, 20].randomElement() ?? 0
+                                 let couponCode = UUID().uuidString.split(separator: "-").first ?? "CODE"*/
+                                strongSelf.landmarkDiscounts[landmark] = (date,discount, String(couponCode))
+                                strongSelf.landmarks.append(landmark)
+                            }
+                        }
+                    }
+                    
+                    
+                    DispatchQueue.main.async {
+                                   strongSelf.activityIndicator?.stopAnimating()
+                                   strongSelf.table.reloadData()
+                               }
+                }
             }
         }
-    }
     }
     
     
