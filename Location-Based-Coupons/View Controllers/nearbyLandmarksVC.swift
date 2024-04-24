@@ -81,7 +81,7 @@ class nearbyLandmarksVC: UIViewController {
         profileButton.addTarget(self, action: #selector(profileButtonTouch), for: UIControl.Event.touchUpInside)
 
         NSLayoutConstraint.activate([
-            profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor , constant: 10),
             profileButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
             profileButton.heightAnchor.constraint(equalToConstant: 50),
             profileButton.widthAnchor.constraint(equalToConstant: 100)
@@ -191,8 +191,11 @@ class SelectableTextCell: UITableViewCell {
     private func configureMapButton() {
         contentView.addSubview(mapButton)
         mapButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        let buttonColor = UIColor(red: 112/255.0, green: 197/255.0, blue: 111/255.0 , alpha: 1)
+
         mapButton.setTitle("View on Map", for: .normal)
-        mapButton.setTitleColor(.green, for: .normal)
+        mapButton.setTitleColor(buttonColor, for: .normal)
         mapButton.addTarget(self, action: #selector(openInMaps), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
@@ -261,8 +264,8 @@ extension nearbyLandmarksVC: UITableViewDelegate, UITableViewDataSource {
                 } else {
                     attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: NSRange(location: 0, length: attributedString.length))
                 }
-                
-                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.green, range: couponCodeRange)
+                let codeColor = UIColor(red: 112/255.0, green: 197/255.0, blue: 111/255.0 , alpha: 1)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: codeColor, range: couponCodeRange)
                 cell.textView.attributedText = attributedString
             }
             else{
