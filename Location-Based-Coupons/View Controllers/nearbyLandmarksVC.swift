@@ -29,6 +29,7 @@ class nearbyLandmarksVC: UIViewController {
     var landmarkDiscounts: [Landmark: (date:String, discount: String, couponCode: String)] = [:]
     
     var activityIndicator: UIActivityIndicatorView?
+    var messageLabel : UILabel?
 
     
     let locationManager = CLLocationManager()
@@ -154,6 +155,41 @@ class nearbyLandmarksVC: UIViewController {
                 // Assign the local indicator to the class property
                 activityIndicator = indicator
             }
+    
+    private func showMessageLabel(_ message : String){
+            
+            if messageLabel == nil {
+                
+                let label = UILabel()
+                
+                view.addSubview(label)
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.backgroundColor = UIColor.systemBackground
+                label.text = message
+                label.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.regular)
+                label.textColor = UIColor.systemGray
+                label.textAlignment = .center
+                
+                NSLayoutConstraint.activate([
+                    
+                    label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                    label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                    label.widthAnchor.constraint(equalToConstant: 350)
+                    
+                ])
+                
+                messageLabel = label
+                
+            }
+            
+            else{
+                
+                messageLabel?.text = message
+                
+            }
+            
+            
+        }
     
     func configureTableView() {
         view.addSubview(table)
@@ -352,6 +388,9 @@ extension nearbyLandmarksVC: CLLocationManagerDelegate {
             
             activityIndicator?.startAnimating()
             
+            messageLabel?.removeFromSuperview()
+            messageLabel = nil
+            
             guard let location = currentLocation else {
                 print("Current location is not available.")
                 activityIndicator?.startAnimating()
@@ -389,52 +428,67 @@ extension nearbyLandmarksVC: CLLocationManagerDelegate {
                 
                 strongSelf.landmarks.removeAll()
                 //put in task since retriving from database is async
-                Task{
-                    for item in filteredItems {
-                        if let postalAddress = item.placemark.postalAddress {
-                            let formattedAddress = CNPostalAddressFormatter.string(from: postalAddress, style: .mailingAddress)
-                            let landmark = Landmark(name: item.name ?? "no name", address: formattedAddress)
-                           
-                            let randomNumber = arc4random_uniform(50)
-                            let db = Firestore.firestore()
-                            
-                            var discount = "f"
-                            var couponCode = "F"
-                            var date = "f"
-                            
-                            
-                            //get coupon code, description, and experation date from datebase
-                            do{
-                                let snapshot = try await db.collection("code").whereField("num", isEqualTo: randomNumber).getDocuments()
-                                for documents in snapshot.documents{
-                                    //print("\(documents.data())")
-                                    couponCode = documents.get("code")! as! String
-                                    discount = documents.get("desc")! as! String
-                                    date = documents.get("date")! as! String
+                
+                if !filteredItems.isEmpty{
+                    
+                    Task{
+                        for item in filteredItems {
+                            if let postalAddress = item.placemark.postalAddress {
+                                let formattedAddress = CNPostalAddressFormatter.string(from: postalAddress, style: .mailingAddress)
+                                let landmark = Landmark(name: item.name ?? "no name", address: formattedAddress)
+                                
+                                let randomNumber = arc4random_uniform(50)
+                                let db = Firestore.firestore()
+                                
+                                var discount = "f"
+                                var couponCode = "F"
+                                var date = "f"
+                                
+                                
+                                //get coupon code, description, and experation date from datebase
+                                do{
+                                    let snapshot = try await db.collection("code").whereField("num", isEqualTo: randomNumber).getDocuments()
+                                    for documents in snapshot.documents{
+                                        //print("\(documents.data())")
+                                        couponCode = documents.get("code")! as! String
+                                        discount = documents.get("desc")! as! String
+                                        date = documents.get("date")! as! String
+                                    }
+                                }
+                                
+                                
+                                if let (_, _, _) = strongSelf.landmarkDiscounts[landmark] {
+                                    strongSelf.landmarks.append(landmark)
+                                } else {
+                                    /*let discount = [5, 10, 15, 20].randomElement() ?? 0
+                                     let couponCode = UUID().uuidString.split(separator: "-").first ?? "CODE"*/
+                                    strongSelf.landmarkDiscounts[landmark] = (date,discount, String(couponCode))
+                                    strongSelf.landmarks.append(landmark)
                                 }
                             }
-                            
-                            
-                            if let (_, _, _) = strongSelf.landmarkDiscounts[landmark] {
-                                strongSelf.landmarks.append(landmark)
-                            } else {
-                                /*let discount = [5, 10, 15, 20].randomElement() ?? 0
-                                 let couponCode = UUID().uuidString.split(separator: "-").first ?? "CODE"*/
-                                strongSelf.landmarkDiscounts[landmark] = (date,discount, String(couponCode))
-                                strongSelf.landmarks.append(landmark)
-                            }
                         }
+                        
+                        
+                        DispatchQueue.main.async {
+                            strongSelf.activityIndicator?.stopAnimating()
+                            strongSelf.table.reloadData()
+                        }
+                    }
+                }
+                    else{
+                        
+                        strongSelf.activityIndicator?.stopAnimating()
+                        strongSelf.table.reloadData()
+                        strongSelf.showMessageLabel("No \(query) Coupons Found ")
+                        
                     }
                     
                     
-                    DispatchQueue.main.async {
-                                   strongSelf.activityIndicator?.stopAnimating()
-                                   strongSelf.table.reloadData()
-                               }
                 }
+                
             }
         }
-    }
+    
     
     
 
